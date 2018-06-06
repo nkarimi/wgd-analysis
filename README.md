@@ -21,7 +21,27 @@ These scripts attempt to determine whether or not there is any support for a sha
 
 # wgd-test.pl
 ## Script Workflow
-Transcriptomes given to the script are first translated into their most likely protein using TransDecoder. An intraspecies all versus all blat search is then performed for for each input transcriptome in order to identify homologous protein pairs. Ks is then calculated for each protein pair using KaKs_Calculator. Pairs are then filtered to the Ks range specified by the user. Quartets are then identified by taking one sequence from each pair found in the specified Ks range in each transcriptome and running ProteinOrtho. Alignments are restricted to homologous sites only using blastp, homologous sites are then aligned using MUSCLE. If the final protein alignment meets the required length cutoff (100 amino acids/300 nucleotides), the sequence is reverse translated to its original nucleotide sequence. RAxML is then used to run a 100 replicate rapid bootstrap using the GTR-Gamma model. If the support of the quartet split is high enough (>= 70 by default), this quartet's topology is used as evidence for whether or not the given transcriptomes shared a whole genome duplication.
+
+Transcriptomes given to the script are first translated into their most likely protein using TransDecoder.
+An intraspecies all-versus-all blat search is then performed for each input transcriptome
+in order to identify homologous protein pairs.
+Ks is then calculated for each protein pair using KaKs_Calculator.
+Pairs are then filtered to the Ks range specified by the user,
+and to have a minimum alignment length of 300bp (by default).
+In each transcriptome and from each pair found in the specified Ks range, 1 of the 2 sequences is chosen
+as a representative (the query sequence is chosen; this choice is somewhat arbitrary).
+For each transcriptome, the representative sequences (1 per pair) are combined into a single fasta file.
+Quartets are then identified by running ProteinOrtho on the files of pair representatives:
+assuming an input of 2 transcriptomes,
+each quartet corresponds to a 1-to-1 cluster, containing exactly 1 representative sequence from each transcriptome.
+For each quartet, alignments are restricted to homologous sites only using blastp,
+homologous sites are then aligned using MUSCLE.
+If the final protein alignment meets the required length cutoff (100 amino acids/300 nucleotides by default),
+the sequence is reverse translated to its original nucleotide sequence.
+RAxML is then used to run a 100-replicate rapid bootstrap using the GTR-Gamma model.
+If the support of the quartet split is high enough (>= 70 by default),
+this quartet's topology is used as evidence for whether or not the given transcriptomes shared a whole genome duplication.
+
 
 ## Script Usage & Settings
 ### Usage
